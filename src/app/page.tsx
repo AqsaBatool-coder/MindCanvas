@@ -3,14 +3,13 @@
 import Post from "@/components/post/page";
 
 const HomePage = () => {
-  // Dummy Data for Posts
   const posts = [
     {
       title: 'The Future of Web Development',
       content: 'Web development is evolving rapidly. In this article, we explore the key trends shaping the future of web technologies...',
       author: 'John Doe',
       date: '2024-09-19',
-      imageUrl: '/images/me.jpg', // Sample image URL
+      imageUrl: '/images/me.jpg',
     },
     {
       title: 'Understanding React Hooks',
@@ -29,7 +28,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 mt-[90px]">
       <h1 className="text-4xl font-bold text-center mb-8">Latest Blog Posts</h1>
       {posts.map((post, index) => (
         <Post
