@@ -5,8 +5,12 @@ import { emailValidator } from '@/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import { register } from '@/actions/register';
+import { useRouter } from 'next/navigation';
+
 
 const SignupForm: React.FC = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     nameValid: true, 
@@ -22,6 +26,8 @@ const SignupForm: React.FC = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,21 +69,10 @@ const SignupForm: React.FC = () => {
           email: formData.email,
           password: formData.password,
       })
-      // const res = await fetch('/actions/register', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     name: formData.name,
-      //     email: formData.email,
-      //     password: formData.password,
-      //   }),
-      // });
-      console.log(res)
+
 
       if (res.status === 200) {
-        console.log('Form submitted:', formData);
+        setSuccessMessage(res.message); 
 
         setFormData({
           name: '',
@@ -91,15 +86,15 @@ const SignupForm: React.FC = () => {
         });
 
         setLoading(false);
+      
       } else {
-        console.log("Something went wrong")
         setLoading(false);
         const errorMessage = await res.json();
         setError(`Registration failed: ${errorMessage.message}`);
       }
     } catch (err: any) {
       setLoading(false);
-      setError('Something went wrong. Please try again.');
+      setError('User already exists');
     }
   };
 
@@ -178,6 +173,22 @@ const SignupForm: React.FC = () => {
         Already have an account? <Link href='/login' className='text-sky-500'>Log In</Link>
       </p>
       {error && <small className="text-red-500 mt-4">{error}</small>}
+      {successMessage && 
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
+          <div className="bg-white rounded-lg p-12 max-w-md w-full">
+          <div className="flex justify-end">
+            <button onClick={() => setSuccessMessage('')}>
+              <Image src='/icons/red-cross.svg' alt='close' width={20} height={20} />
+            </button>
+          </div>
+            <div className="flex flex-col items-center justify-center gap-[14px]">
+              <Image src='/icons/success-icon.svg' alt='success' width={100} height={100} />
+              <h2 className="text-[20px] leading-[34px] font-[600] text-center mt-[20px]">{successMessage}</h2>
+              <p className="text-[16px] leading-[34px] font-[400] text-center">You can now <Link href='/login' className='text-blue-500 underline'>log In</Link></p>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   );
 };

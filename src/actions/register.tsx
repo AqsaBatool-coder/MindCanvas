@@ -21,7 +21,7 @@ export const register = async (values: any) => {
           password: hashedPassword,
         });
         const savedUser = await user.save();
-        return {user: savedUser, status: 200, message: 'User has benn created successfully.'}
+        return {user: savedUser, status: 200, message: 'Account Created Successfully!'}
     }catch(e){
         console.log(e);
     }
