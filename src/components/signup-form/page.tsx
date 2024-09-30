@@ -4,6 +4,7 @@ import TextInput from '../ui/text-input/page';
 import { emailValidator } from '@/utils';
 import Link from 'next/link';
 import Image from 'next/image';
+import { register } from '@/actions/register';
 
 const SignupForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -24,21 +25,26 @@ const SignupForm: React.FC = () => {
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-  
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,  // Update the input value
+      [name]: value, // Update the input value
       nameValid: name === 'name' ? value.length >= 3 : prevState.nameValid,
       emailValid: name === 'email' ? emailValidator(value) : prevState.emailValid,
       passwordValid: name === 'password' ? value.length >= 8 : prevState.passwordValid,
-      passwordsMatch: name === 'confirmPassword' ? value === formData.password : formData.confirmPassword === value,
+      passwordsMatch:
+        name === 'confirmPassword'
+          ? value === prevState.password
+          : name === 'password'
+          ? value === prevState.confirmPassword
+          : prevState.passwordsMatch,
     }));
-  
+
     setError('');
   };
   
 
-  const isValid = formData.emailValid && formData.passwordValid && formData.email && formData.password;
+  const isValid = formData.emailValid && formData.passwordValid &&  formData.passwordsMatch && formData.email && formData.password;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,19 +53,37 @@ const SignupForm: React.FC = () => {
 
     if (!isValid) {
       setLoading(false);
-      setError('Please fill in the required information');
+      setError('Please fill in the required information correctly.');
       return;
     }
 
     try {
-      setTimeout(() => {
+      const res:any = await register ({
+        name: formData.name,
+          email: formData.email,
+          password: formData.password,
+      })
+      // const res = await fetch('/actions/register', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     name: formData.name,
+      //     email: formData.email,
+      //     password: formData.password,
+      //   }),
+      // });
+      console.log(res)
+
+      if (res.status === 200) {
         console.log('Form submitted:', formData);
 
         setFormData({
           name: '',
-          nameValid: true, 
+          nameValid: true,
           email: '',
-          emailValid: true,   
+          emailValid: true,
           password: '',
           confirmPassword: '',
           passwordValid: true,
@@ -67,15 +91,21 @@ const SignupForm: React.FC = () => {
         });
 
         setLoading(false);
-      }, 2000);  
+      } else {
+        console.log("Something went wrong")
+        setLoading(false);
+        const errorMessage = await res.json();
+        setError(`Registration failed: ${errorMessage.message}`);
+      }
     } catch (err: any) {
       setLoading(false);
       setError('Something went wrong. Please try again.');
     }
   };
 
+
   return (
-    <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] bg-white shadow-custom-white z-[10]'>
+    <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] bg-white shadow-custom-white border-t-4 border-primary'>
       <h1 className='text-black text-center md:font-[400] font-[500] text-[35px] md:text-[50px] leading-[30px] mb-[40px]'>
         Sign Up
       </h1> 

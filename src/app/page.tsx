@@ -9,21 +9,21 @@ const HomePage = () => {
       content: 'Web development is evolving rapidly. In this article, we explore the key trends shaping the future of web technologies...',
       author: 'John Doe',
       date: '2024-09-19',
-      imageUrl: '/images/me.jpg',
+      imageUrl: '/images/user-avatar-icon.png',
     },
     {
       title: 'Understanding React Hooks',
       content: 'React Hooks have changed the way we write components. This article dives deep into the most commonly used hooks, their purpose, and how they simplify component logic...',
       author: 'Jane Smith',
       date: '2024-09-17',
-      imageUrl: '/images/me.jpg',
+      imageUrl: '/images/user-avatar-icon.png',
     },
     {
       title: 'A Guide to TypeScript',
       content: 'TypeScript offers a powerful type system that helps catch errors early in development. Learn why TypeScript is becoming the go-to choice for modern JavaScript development...',
       author: 'Mike Johnson',
       date: '2024-09-15',
-      imageUrl: '/images/me.jpg',
+      imageUrl: '/images/user-avatar-icon.png',
     },
   ];
 

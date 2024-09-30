@@ -62,7 +62,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] bg-white shadow-custom-white z-[10]'>
+    <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] bg-white shadow-custom-white border-t-4 border-primary'>
       <h1 className='text-black md:font-[400] font-[500] text-center text-[30px] md:text-[50px] leading-[30px] mb-[40px]'>
         Log In
       </h1> 

@@ -62,7 +62,7 @@ const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-      <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] lg:w-[60%] bg-white shadow-custom-white'>
+      <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] lg:w-[60%] bg-white shadow-custom-white border-t-4 border-primary'>
         <h1 className='text-black text-center md:font-[400] font-[500] text-[35px] md:text-[50px] leading-[30px] mb-[34px]'>
           Reset Password
         </h1>
