@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import TextInput from '../ui/text-input/page';
 import { emailValidator } from '@/utils';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const LoginForm: React.FC = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     emailValid: true,   
@@ -31,42 +34,43 @@ const LoginForm: React.FC = () => {
 
   const isValid = formData.emailValid && formData.passwordValid && formData.email && formData.password;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    if (!isValid) {
-      setLoading(false);
-      setError('Enter valid email & password');
-      return;
-    }
-
+  const loginHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
     try {
-      setTimeout(() => {
-        console.log('Form submitted:', formData);
+        if (isValid) {
+            const res = await signIn("credentials", {
+                email: formData?.email,
+                password: formData?.password,
+                redirect: false,
+            })
 
-        setFormData({
-          email: '',
-          emailValid: true,
-          password: '',
-          passwordValid: true,
-        });
-
-        setLoading(false);
-      }, 2000);  
+            if (res?.error) {
+                setError(res.error as string)
+            }
+            else if (res?.ok) {
+                setFormData({ email: '', emailValid: true, password: '', passwordValid: true })
+                router.replace("dashboard");
+            }
+        }
+        else {
+            setError('Enter valid email & password')
+        }
     } catch (err: any) {
-      setLoading(false);
-      setError('Something went wrong. Please try again.');
+        setError(err.message)
+    } finally {
+        setLoading(false)
     }
-  };
+}
+
 
   return (
     <div className='flex flex-col items-center justify-center rounded-[10px] md:px-[80px] px-[20px] xl:px-[150px] py-[64px] lg:py-[114px] mx-auto md:my-[200px] my-[90px] w-[80%] bg-white shadow-custom-white border-t-4 border-primary'>
       <h1 className='text-black md:font-[400] font-[500] text-center text-[30px] md:text-[50px] leading-[30px] mb-[40px]'>
         Log In
       </h1> 
-      <form onSubmit={handleSubmit} className="flex flex-col items-center max-w-md mx-auto pb-[24px] gap-[34px] w-full">
+      <form onSubmit={loginHandler} className="flex flex-col items-center max-w-md mx-auto pb-[24px] gap-[34px] w-full">
         <div className='flex flex-col w-[90%]'>
                 <TextInput
                   type="email"

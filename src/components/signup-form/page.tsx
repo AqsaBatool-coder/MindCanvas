@@ -86,6 +86,9 @@ const SignupForm: React.FC = () => {
         });
 
         setLoading(false);
+        setTimeout(() => {
+          router.push('/login');
+        }, 3000);
       
       } else {
         setLoading(false);
